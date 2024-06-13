@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, vi } from "vitest";
 import { expect as chaiExpect } from "chai"; // Import Chai's expect
 
 import App from "./App";
@@ -23,7 +23,7 @@ describe("App component", () => {
       Promise.resolve({
         ok: true,
         text: () => Promise.resolve("123456"),
-      })
+      }),
     );
 
     render(<App />);
@@ -43,9 +43,7 @@ describe("App component", () => {
 
   it("displays error message on fetch failure", async () => {
     // Mock the fetch function to simulate a failure
-    global.fetch = vi.fn(() =>
-      Promise.reject(new Error("Fetch failed"))
-    );
+    global.fetch = vi.fn(() => Promise.reject(new Error("Fetch failed")));
 
     render(<App />);
 
