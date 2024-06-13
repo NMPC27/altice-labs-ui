@@ -18,5 +18,3 @@ jobs:
 
       - name: Run ESLinter
         run: npm run lint
-
-
