@@ -53,8 +53,8 @@ describe("App component", () => {
     const button = screen.getByRole("button", { name: /ok/i });
     fireEvent.click(button);
 
-    const result = await screen.findByText(/Error!/);
-    chaiExpect(result.textContent).to.equal("Result: Error! (check console)");
+    const result = await screen.findByText(/Error/);
+    chaiExpect(result.textContent).to.equal("Result: Error: Couldn't connect to API");
 
     // Restore the original fetch implementation
     global.fetch.mockRestore();

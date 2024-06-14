@@ -9,27 +9,44 @@ function App() {
     setNum(e.target.value);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleClick();
+    }
+  };
+
   const handleClick = () => {
     setRes("");
 
-    fetch(`http://localhost:8080/labseq/${num}`)
-      .then((response) => {
-        if (!response.ok) {
-          setRes("Error! (check console)");
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.text();
-      })
-      .then((data) => {
-        setRes(splitInThree(data));
-      })
-      .catch((error) => {
-        setRes("Error! (check console)");
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error,
-        );
-      });
+    if (num === "") {
+      setRes("Error: Please enter a positive integer");
+      return;
+    }
+    let tmp = Number(num);
+    if (Number.isInteger(tmp) && tmp >= 0) {
+      fetch(`http://localhost:8080/labseq/${num}`)
+        .then((response) => {
+          if (!response.ok) {
+            setRes("Error: Network response was not ok");
+            throw new Error(
+              "Network response was not ok " + response.statusText,
+            );
+          }
+          return response.text();
+        })
+        .then((data) => {
+          setRes(splitInThree(data));
+        })
+        .catch((error) => {
+          setRes("Error: Couldn't connect to API");
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error,
+          );
+        });
+    } else {
+      setRes("Error: Please enter a positive integer");
+    }
   };
 
   return (
@@ -43,7 +60,12 @@ function App() {
       <div>
         <h1>Labseq number generator</h1>
 
-        <input type="text" value={num} onChange={handleChange} />
+        <input
+          type="text"
+          value={num}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+        />
         <button style={{ marginLeft: "1vw" }} onClick={() => handleClick()}>
           OK
         </button>
